@@ -220,13 +220,7 @@ with st.sidebar:
     st.markdown("**Care Pipeline Dashboard**")
     st.markdown("---")
 
-    st.markdown("### 📂 Data Source")
-    st.caption("Auto-loading from data folder")
-    uploaded = st.file_uploader(
-        "Override with different CSV",
-        type=["csv"],
-        help="Optional — leave empty to use default dataset"
-    )
+    uploaded = None  # Auto-load from data folder
 
     st.markdown("---")
     st.markdown("### 🗓️ Date Range")
@@ -258,17 +252,9 @@ if df is None:
 with st.sidebar:
     min_date = df["Date"].min().date()
     max_date = df["Date"].max().date()
-    date_range = st.date_input(
-        "Select range",
-        value=(min_date, max_date),
-        min_value=min_date,
-        max_value=max_date,
-    )
-    if len(date_range) == 2:
-        start, end = date_range
-        df_f = df[(df["Date"].dt.date >= start) & (df["Date"].dt.date <= end)].copy()
-    else:
-        df_f = df.copy()
+    start = st.date_input("Start date", value=min_date, min_value=min_date, max_value=max_date)
+    end = st.date_input("End date", value=max_date, min_value=min_date, max_value=max_date)
+    df_f = df[(df["Date"].dt.date >= start) & (df["Date"].dt.date <= end)].copy()
 
     st.markdown("---")
     st.markdown("### ⚙️ Alert Thresholds")
