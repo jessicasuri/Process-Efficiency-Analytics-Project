@@ -179,8 +179,8 @@ def load_data(uploaded_file=None):
     })
 
     # KPIs
-    df["transfer_efficiency_ratio"] = df["cbp_transferred"] / df["cbp_custody"]
-    df["discharge_effectiveness"]   = df["hhs_discharged"]  / df["hhs_care"]
+    df["transfer_efficiency_ratio"] = np.where(df["cbp_custody"] != 0, df["cbp_transferred"] / df["cbp_custody"], np.nan)
+    df["discharge_effectiveness"]   = np.where(df["hhs_care"] != 0, df["hhs_discharged"] / df["hhs_care"], np.nan)
     df["daily_throughput_rate"]      = np.where(
         df["cbp_apprehended"] != 0,
         df["hhs_discharged"] / df["cbp_apprehended"], np.nan
