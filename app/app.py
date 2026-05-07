@@ -163,10 +163,8 @@ def load_data(uploaded_file=None):
     df = df.drop_duplicates().dropna()
     df = df.sort_values("Date").reset_index(drop=True)
 
-    # Fix HHS Care dtype (comma-separated strings)
-    df["Children in HHS Care"] = (
-        df["Children in HHS Care"].astype(str).str.replace(",", "").astype(float)
-    )
+    # Fix HHS Care comma-separated values
+    df["Children in HHS Care"] = df["Children in HHS Care"].astype(str).str.replace(",", "").astype(float)
 
     # Rename
     df = df.rename(columns={
