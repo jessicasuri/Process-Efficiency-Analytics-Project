@@ -158,7 +158,14 @@ def load_data(uploaded_file=None):
     if uploaded_file is not None:
         df = pd.read_csv(uploaded_file, parse_dates=["Date"])
     else:
-        return None
+        # Auto-load from data folder
+        import os
+        base = os.path.dirname(os.path.abspath(__file__))
+        csv_path = os.path.join(base, "..", "data", "HHS_Unaccompanied_Alien_Children_Program.csv")
+        if os.path.exists(csv_path):
+            df = pd.read_csv(csv_path, parse_dates=["Date"])
+        else:
+            return None
 
     df = df.drop_duplicates().dropna()
     df = df.sort_values("Date").reset_index(drop=True)
@@ -214,10 +221,11 @@ with st.sidebar:
     st.markdown("---")
 
     st.markdown("### 📂 Data Source")
+    st.caption("Auto-loading from data folder")
     uploaded = st.file_uploader(
-        "Upload CSV Dataset",
+        "Override with different CSV",
         type=["csv"],
-        help="Upload HHS_Unaccompanied_Alien_Children_Program.csv"
+        help="Optional — leave empty to use default dataset"
     )
 
     st.markdown("---")
