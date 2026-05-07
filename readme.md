@@ -101,6 +101,4 @@ streamlit run app/app.py
 ---
 
 ## 👤 Author
-
-**Unified Mentor Internship Project**
-U.S. Department of Health and Human Services
+Jessica Suri
