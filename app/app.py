@@ -587,8 +587,8 @@ elif page == "🚨 Bottleneck":
             **CHART_THEME, height=350,
             title=dict(text="Efficiency Gap at a Glance",
                        font=dict(color="#e6edf3", size=14)),
-            yaxis=dict(tickformat=".0%", gridcolor="#21262d", linecolor="#30363d")
         )
+        fig_bar.update_yaxes(tickformat=".0%")
         st.plotly_chart(fig_bar, use_container_width=True)
 
     with col2:
@@ -665,8 +665,8 @@ elif page == "📅 Temporal":
         **CHART_THEME, height=340,
         title=dict(text="Month-over-Month Discharge Effectiveness",
                    font=dict(color="#e6edf3", size=14)),
-        xaxis=dict(tickangle=45, gridcolor="#21262d", linecolor="#30363d")
     )
+    fig_mde.update_xaxes(tickangle=45)
     st.plotly_chart(fig_mde, use_container_width=True)
 
     # Yearly heatmap
