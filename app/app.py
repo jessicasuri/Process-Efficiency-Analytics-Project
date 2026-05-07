@@ -163,11 +163,10 @@ def load_data(uploaded_file=None):
     df = df.drop_duplicates().dropna()
     df = df.sort_values("Date").reset_index(drop=True)
 
-    # Fix HHS Care dtype
-    if df["Children in HHS Care"].dtype == object:
-        df["Children in HHS Care"] = (
-            df["Children in HHS Care"].astype(str).str.replace(",", "").astype(float)
-        )
+    # Fix HHS Care dtype (comma-separated strings)
+    df["Children in HHS Care"] = (
+        df["Children in HHS Care"].astype(str).str.replace(",", "").astype(float)
+    )
 
     # Rename
     df = df.rename(columns={
@@ -177,6 +176,10 @@ def load_data(uploaded_file=None):
         "Children in HHS Care": "hhs_care",
         "Children discharged from HHS Care": "hhs_discharged",
     })
+
+    # Force all numeric columns to float64 (fixes Arrow dtype issues on Streamlit Cloud)
+    for col in ["cbp_apprehended", "cbp_custody", "cbp_transferred", "hhs_care", "hhs_discharged"]:
+        df[col] = pd.to_numeric(df[col], errors="coerce").astype("float64")
 
     # KPIs
     df["transfer_efficiency_ratio"] = np.where(df["cbp_custody"] != 0, df["cbp_transferred"] / df["cbp_custody"], np.nan)
